@@ -9,6 +9,7 @@ import android.widget.TextView;
 import android.widget.ViewAnimator;
 
 import com.ambientbytes.contentpresenter.databinding.RootActivityBinding;
+import com.ambientbytes.contentpresenter.viewmodels.BooleanToViewVisibleConverter;
 import com.ambientbytes.contentpresenter.viewmodels.IViewModel;
 import com.ambientbytes.contentpresenter.viewmodels.IViewModelPresenter;
 import com.ambientbytes.contentpresenter.viewmodels.RootViewModel;
@@ -104,6 +105,7 @@ public class RootActivity extends Activity implements IViewModelPresenter {
 
         RootViewModel vm = new RootViewModel(this);
         binding.setVm(vm);
+        binding.setBoolToVisible(new BooleanToViewVisibleConverter());
 
         final ViewAnimator animator = (ViewAnimator) findViewById(R.id.content_presenter);
         //

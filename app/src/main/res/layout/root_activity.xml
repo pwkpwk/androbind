@@ -2,7 +2,10 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
     <data>
         <import type="android.view.View" />
-        <variable name="vm" type="com.ambientbytes.contentpresenter.viewmodels.RootViewModel" />
+        <import type="com.ambientbytes.contentpresenter.viewmodels.IValueConverter" />
+        <import type="com.ambientbytes.contentpresenter.viewmodels.RootViewModel" />
+        <variable name="vm" type="RootViewModel" />
+        <variable name="boolToVisible" type="IValueConverter" />
     </data>
 
     <FrameLayout
@@ -28,13 +31,13 @@
                 android:layout_height="wrap_content">
 
                 <Button
-                    android:visibility="@{vm.isPlopVisible ? View.VISIBLE : View.GONE}"
+                    android:visibility="@{(int)boolToVisible.Convert(vm.isPlopVisible)}"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Plop View"
                     android:onClick="@{()->vm.showPlopView()}"/>
                 <Button
-                    android:visibility="@{vm.isFlopVisible ? View.VISIBLE : View.GONE}"
+                    android:visibility="@{(int)boolToVisible.Convert(vm.isFlopVisible)}"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Flop View"
