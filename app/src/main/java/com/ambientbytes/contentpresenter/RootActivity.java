@@ -1,17 +1,20 @@
 package com.ambientbytes.contentpresenter;
 
 import android.app.Activity;
+import android.app.FragmentTransaction;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.view.View;
 import android.view.animation.Animation;
-import android.widget.TextView;
+import android.widget.FrameLayout;
 import android.widget.ViewAnimator;
 
 import com.ambientbytes.contentpresenter.databinding.RootActivityBinding;
 import com.ambientbytes.contentpresenter.viewmodels.BooleanToViewVisibleConverter;
+import com.ambientbytes.contentpresenter.viewmodels.FlopViewModel;
 import com.ambientbytes.contentpresenter.viewmodels.IViewModel;
 import com.ambientbytes.contentpresenter.viewmodels.IViewModelPresenter;
+import com.ambientbytes.contentpresenter.viewmodels.PlopViewModel;
 import com.ambientbytes.contentpresenter.viewmodels.RootViewModel;
 
 import org.jetbrains.annotations.NotNull;
@@ -102,7 +105,9 @@ public class RootActivity extends Activity implements IViewModelPresenter {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         RootActivityBinding binding = DataBindingUtil.setContentView(this, R.layout.root_activity);
-
+        //
+        // Compose the view model - inject all dependencies.
+        //
         RootViewModel vm = new RootViewModel(this);
         binding.setVm(vm);
         binding.setBoolToVisible(new BooleanToViewVisibleConverter());
@@ -118,7 +123,9 @@ public class RootActivity extends Activity implements IViewModelPresenter {
         a = animator.getOutAnimation();
         if (null != a)
             a.setDuration(100);
-
+        //
+        // Perform initial navigation.
+        //
         vm.showPlopView();
     }
 
@@ -194,17 +201,29 @@ public class RootActivity extends Activity implements IViewModelPresenter {
         View resolvedView = null;
 
         if (vmClassNamne.endsWith("PlopViewModel")) {
-            TextView t = new TextView(getApplicationContext());
-            t.setText("Plop View");
-            t.setBackgroundColor(0xFFCCFFCC);
-            t.setTextColor(0xFF004000);
-            resolvedView = t;
+            PlopFragment view = new PlopFragment();
+            FrameLayout layout = new FrameLayout(getApplicationContext());
+            FragmentTransaction trans;
+
+            view.setViewModel((PlopViewModel)viewModel);
+            layout.setId(R.id.plop_fragment_layout);
+            trans = getFragmentManager().beginTransaction();
+            trans.add(R.id.plop_fragment_layout, view);
+            trans.commit();
+
+            resolvedView = layout;
         } else if (vmClassNamne.endsWith("FlopViewModel")) {
-            TextView t = new TextView(getApplicationContext());
-            t.setText("Flop View");
-            t.setBackgroundColor(0xFFFFCC66);
-            t.setTextColor(0xFF200040);
-            resolvedView = t;
+            FlopFragment view = new FlopFragment();
+            FrameLayout layout = new FrameLayout(getApplicationContext());
+            FragmentTransaction trans;
+
+            view.setViewModel((FlopViewModel)viewModel);
+            layout.setId(R.id.flop_fragment_layout);
+            trans = getFragmentManager().beginTransaction();
+            trans.add(R.id.flop_fragment_layout, view);
+            trans.commit();
+
+            resolvedView = layout;
         }
 
         return resolvedView;

@@ -2,7 +2,7 @@ package com.ambientbytes.contentpresenter.viewmodels;
 
 import org.jetbrains.annotations.NotNull;
 
-final class FlopViewModel implements IViewModel {
+public final class FlopViewModel implements IViewModel {
     @Override
     public void Presenting(@NotNull IViewModelPresenter presenter) {
     }
